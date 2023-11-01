@@ -1,6 +1,5 @@
 #include <iostream>
 #include "Matrice.h"
-#include <cmath>
 
 using namespace std;
 
@@ -16,8 +15,9 @@ Matrice::Matrice(vector<std::vector<double>> tab){
     pComatrice = (Matrice*) malloc(sizeof(Matrice));
 
     for(unsigned int i(1);i<m_height;i++){
-        if(m_tab[i].size() != m_width){cout << "ERROR : Invalid shape !" << endl;
-         return;}} //vérification de la forme de la matrice.
+        if(m_tab[i].size() != m_width){
+            throw std::runtime_error("ERROR : Invalid shape !");}
+            } //vérification de la forme de la matrice.
 }
 
 //retourne le tableau de nombre associé à la matrice
@@ -109,7 +109,7 @@ Matrice Matrice::getComatrice() {
     for (unsigned int i = 0; i < m_height; ++i) {
         res.push_back({});
         for (unsigned int j = 0; j < m_width; ++j) {
-        res[i].push_back(pow(-1,i+j)* getMinor(i,j).getDet());
+        res[i].push_back((1-((i+j)%2)*2)* getMinor(i,j).getDet()); // (1-((i+j)%2)*2) pow(-1,i+j)
         }
     }
     Matrice result = Matrice({res});
