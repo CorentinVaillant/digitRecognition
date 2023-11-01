@@ -1,16 +1,36 @@
-CC=g++
-sources=main.cpp Matrice.h NeuralNet.h
-objects=$($(sources:.h=.o):.cpp=.o)
+# Makefile for your C++ project
 
-exeName=main.exe
-flag=-Wall #-fsanitize=address
+# Compiler
+CXX = g++
+# Compiler flags
+CXXFLAGS = -std=c++11 -Wall -Wextra
 
-$(objects) :
-	$(CC) -c $(sources) -o $(objects) $(flag)
+# Directories
+SRCDIR = .
+BUILDDIR = build
+BINDIR = bin
 
-main : $(objects:.h=.o)
-	$(CC) -o bin/$(exeName) bin/$(objects) $(flag)
+# Source files
+SOURCES = $(SRCDIR)/main.cpp $(SRCDIR)/Matrice.cpp $(SRCDIR)/NeuralNet.cpp
+# Object files
+OBJECTS = $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SOURCES))
+# Executable name
+EXECUTABLE = $(BINDIR)/main.exe
 
-main.o : $(sources)
-	$(CC) -c main.cpp -o bin/main.o $(flag)
+all: $(EXECUTABLE)
 
+# Rule for linking object files and creating the executable
+$(EXECUTABLE): $(OBJECTS)
+	@mkdir -p $(BINDIR)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
+# Rule for compiling source files into object files
+$(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
+	@mkdir -p $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Rule to clean the build
+clean:
+	@rm -rf $(BUILDDIR) $(BINDIR)
+
+.PHONY: all clean

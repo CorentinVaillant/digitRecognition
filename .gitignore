@@ -31,6 +31,9 @@
 *.out
 *.app
 
+#images
+*.jpg
+
 #files
+build
 bin
-handwriten
