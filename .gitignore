@@ -37,3 +37,6 @@
 #files
 build
 bin
+
+#IDE files
+.vscode
