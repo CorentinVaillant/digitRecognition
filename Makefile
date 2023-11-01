@@ -32,5 +32,3 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
 # Rule to clean the build
 clean:
 	@rm -rf $(BUILDDIR) $(BINDIR)
-
-.PHONY: all clean
