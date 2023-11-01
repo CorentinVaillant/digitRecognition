@@ -15,7 +15,9 @@ Matrice::Matrice(vector<std::vector<double>> tab){
     pTranspose = (Matrice*) malloc(sizeof(Matrice));
     pComatrice = (Matrice*) malloc(sizeof(Matrice));
 
-    for(int i(1);i<m_height;i++){if(m_tab[i].size() != m_width){cout << "ERROR : Invalid shape !" << endl; return;}} //vérification de la forme de la matrice.
+    for(unsigned int i(1);i<m_height;i++){
+        if(m_tab[i].size() != m_width){cout << "ERROR : Invalid shape !" << endl;
+         return;}} //vérification de la forme de la matrice.
 }
 
 //retourne le tableau de nombre associé à la matrice
@@ -26,12 +28,12 @@ std::vector<vector<double>> Matrice::getTab() {
 //addition de deux matrices
 Matrice Matrice::operator+(const Matrice &M) {
     //vérification de la formes des matrices :
-    if(m_height != M.m_height | m_width != M.m_width){cout << "ERROR : shapes are not matching for an addition !"<<endl;}
+    if((m_height != M.m_height) | (m_width != M.m_width)){cout << "ERROR : shapes are not matching for an addition !"<<endl;}
     //calcul :
     std::vector<std::vector<double>> resTab;
-    for(int i(0);i<m_height;i++){
+    for(unsigned int i(0);i<m_height;i++){
         resTab.push_back({});
-        for (int j = 0; j < m_width; ++j) {
+        for (unsigned int j = 0; j < m_width; ++j) {
         resTab[i].push_back(m_tab[i][j] + M.m_tab[i][j]);
         }} return {resTab};
 }
@@ -39,9 +41,9 @@ Matrice Matrice::operator+(const Matrice &M) {
 //multiplication d'une matrice par un scalaire
 Matrice Matrice::operator*(double const& x){
     std::vector<std::vector<double>> resTab;
-    for(int i(0);i<m_height;i++){
+    for( unsigned int i(0);i<m_height;i++){
         resTab.push_back({});
-        for (int j = 0; j < m_width; ++j) {
+        for (unsigned int j = 0; j < m_width; ++j) {
             resTab[i].push_back(m_tab[i][j] * x);
         }} return {resTab};
 }
@@ -50,20 +52,22 @@ Matrice Matrice::operator*(double const& x){
 Matrice Matrice::operator*(const Matrice &M) {
     if(m_width != M.m_height ){cout << "ERROR : shapes are not matching for an addition !"<<endl;}
     std::vector<std::vector<double>> resTab;
-    for(int i(0);i<m_height;i++){
+    for(unsigned int i(0);i<m_height;i++){
         resTab.push_back({});
-        for (int j = 0; j < M.m_width; ++j) {
+        for (unsigned int j = 0; j < M.m_width; ++j) {
             resTab[i].push_back(0);
-            for (int k(0);k<m_width;k++){resTab[i][j] += m_tab[i][k] * M.m_tab[k][j];}
+            for (unsigned int k(0);k<m_width;k++){
+                resTab[i][j] += m_tab[i][k] * M.m_tab[k][j];
+                }
         }} return {resTab};
 }
 
 //exponentiation d'une matrice
 Matrice Matrice::operator^(const int &n) {
     if(n == 0){    vector<vector<double>> tab;
-        for (int i = 0; i < m_width; ++i) {
+        for (unsigned int i = 0; i < m_width; ++i) {
             tab.push_back({});
-            for (int j = 0; j < m_width; ++j) {
+            for (unsigned int j = 0; j < m_width; ++j) {
                 if(i == j){tab[i].push_back(1.0);}
                 else{tab[i].push_back(0.0);}
             }
@@ -79,17 +83,17 @@ Matrice Matrice::operator^(const int &n) {
 vector<double> Matrice::getRow(int i) {return m_tab[i];}
 vector<double> Matrice::getColumn(int j) {
     vector<double> res;
-    for(int i(0);i<m_height;i++){
+    for(unsigned int i(0);i<m_height;i++){
         res.push_back(m_tab[i][j]);
     } return res;}
 
 //renvoie la matrice mineur (je suis pas sûr du nom de cette dernière x) )
-Matrice Matrice::getMinor(int I, int J) {
+Matrice Matrice::getMinor(unsigned int I, unsigned int J) {
     vector<vector<double>> res;
-    for (int i = 0; i < m_height; ++i) {
+    for (unsigned int i = 0; i < m_height; ++i) {
         if (I != i) {
             res.push_back({});
-            for (int j = 0; j < m_width; ++j) {
+            for (unsigned int j = 0; j < m_width; ++j) {
                 if (J != j) {
                     res.back().push_back(m_tab[i][j]);
                 }
@@ -102,13 +106,16 @@ Matrice Matrice::getComatrice() {
     if(isComatriceCalculed) return *pComatrice;
 
     vector<vector<double>> res;
-    for (int i = 0; i < m_height; ++i) {
+    for (unsigned int i = 0; i < m_height; ++i) {
         res.push_back({});
-        for (int j = 0; j < m_width; ++j) {
+        for (unsigned int j = 0; j < m_width; ++j) {
         res[i].push_back(pow(-1,i+j)* getMinor(i,j).getDet());
         }
     }
-    *pComatrice = Matrice({res});
+    Matrice result = Matrice({res});
+    result.pComatrice = this;
+    result.isComatriceCalculed = true;
+    *pComatrice = result;
     isComatriceCalculed = true;
     return *pComatrice;
 }
@@ -122,7 +129,7 @@ double Matrice::getDet() {
     else{
         Matrice C = getComatrice();
         double determinant = 0;
-        for (int i = 0; i < m_height; ++i) {
+        for (unsigned int i = 0; i < m_height; ++i) {
             determinant += C.m_tab[i][0] * m_tab[i][0];
         }
         isDeterminantCalculed = true;
@@ -133,15 +140,18 @@ double Matrice::getDet() {
 Matrice Matrice::getTranspose() {
     if(isTransposeCalculed) return *pTranspose;
 
-    vector<vector<double>> res;
-    for (int i = 0; i < m_width; ++i) {
-        res.push_back({});
-        for (int j = 0; j < m_height; ++j) {
-            res[i].push_back(m_tab[j][i]);
+    vector<vector<double>> resTab;
+    for (unsigned int i = 0; i < m_width; ++i) {
+        resTab.push_back({});
+        for (unsigned int j = 0; j < m_height; ++j) {
+            resTab[i].push_back(m_tab[j][i]);
         }
     }
-    
-    *pTranspose = Matrice({res});
+    Matrice result = Matrice({resTab});
+    result.pTranspose = this;
+    result.isTransposeCalculed = true;
+
+    *pTranspose = result;
     isTransposeCalculed = true;
     return *pTranspose;
 }
@@ -150,15 +160,18 @@ Matrice Matrice::getTranspose() {
 Matrice Matrice::getInverse() {
     if(isInversedCalculed) return *pInverse ;
     else{
-        *pInverse = getComatrice().getTranspose() * (1/getDet());
+        Matrice result = getComatrice().getTranspose() * (1/getDet());
+        result.pInverse = this;
+        result.isInversedCalculed=true;
+        *pInverse = result;
         isInversedCalculed = true;
         return *pInverse;
     }
 }
 
 //variables privées corespondant à la largeur et la hauteur de la matrice
-const unsigned int Matrice::getHeight() {return m_width;}
-const unsigned int Matrice::getWidth(){return m_height;}
+unsigned int Matrice::getHeight() {return m_width;}
+unsigned int Matrice::getWidth(){return m_height;}
 
 void Matrice::freeConectedMatrice()
 {
@@ -169,9 +182,9 @@ void Matrice::freeConectedMatrice()
 
 //affiche la matrice
 void Matrice::print() {
-    for(int i(0);i < m_height;i++){
+    for(unsigned int i(0);i < m_height;i++){
         cout << '|';
-        for(int j(0);j<m_width;j++){
+        for(unsigned int j(0);j<m_width;j++){
             printf("%3f|",m_tab[i][j]);
         }
         cout << endl;
