@@ -11,13 +11,17 @@ BUILDDIR = build
 BINDIR = bin
 
 # Source files
-SOURCES = $(SRCDIR)/main.cpp $(SRCDIR)/Matrice.cpp $(SRCDIR)/NeuralNet.cpp
+SOURCES = $(SRCDIR)/main.cpp $(SRCDIR)/Matrice.cpp
 # Object files
 OBJECTS = $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SOURCES))
 # Executable name
 EXECUTABLE = $(BINDIR)/main.exe
 
 all: $(EXECUTABLE)
+
+run : $(EXECUTABLE)
+	echo run $(EXECUTABLE)
+	./$(EXECUTABLE)
 
 # Rule for linking object files and creating the executable
 $(EXECUTABLE): $(OBJECTS)

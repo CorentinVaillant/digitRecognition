@@ -3,7 +3,6 @@ g++ -fdiagnostics-color=always -g /home/corentin/C++/digitRecognition/main.cpp M
 */
 #include  <iostream>
 #include "Matrice.h"
-#include "NeuralNet.h"
 #include "Images.cpp"
 #include <vector>
 using namespace std;
