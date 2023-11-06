@@ -18,6 +18,7 @@ OBJECTS = $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SOURCES))
 EXECUTABLE = $(BINDIR)/main.exe
 
 all: $(EXECUTABLE)
+	echo off
 
 run : $(EXECUTABLE)
 	echo run $(EXECUTABLE)
