@@ -1,13 +1,9 @@
-/*
-g++ -fdiagnostics-color=always -g /home/corentin/C++/digitRecognition/main.cpp Matrice.cpp -o /home/corentin/C++/digitRecognition/main && ./main
-*/
 #include  <iostream>
 #include "Matrice.h"
 #include "Images.cpp"
 #include <vector>
 using namespace std;
 
-//c
 
 Matrice randomMatrice(unsigned int I, unsigned int J){
     vector<vector<double>> tab;
