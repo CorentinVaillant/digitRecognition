@@ -2,6 +2,6 @@
 #define DEEPLEARNING_IMAGES_H
 #include "Matrice.h"
 
-void displayMatriceAsImage(Matrice M);
+Matrice imageToMatrice(char path[]);
 
 #endif 
