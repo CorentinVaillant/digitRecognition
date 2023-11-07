@@ -17,7 +17,16 @@ OBJECTS = $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SOURCES))
 # Executable name
 EXECUTABLE = $(BINDIR)/main.exe
 
+default :
+	echo off
+	make all
+
+
 all: $(EXECUTABLE)
+
+echo :
+	echo on
+	make all
 
 run : $(EXECUTABLE)
 	echo run $(EXECUTABLE)
