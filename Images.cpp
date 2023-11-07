@@ -5,3 +5,6 @@
 
 using namespace std;
 
+void displayMatriceAsImage(Matrice M){
+
+}

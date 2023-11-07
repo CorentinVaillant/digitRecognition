@@ -191,3 +191,12 @@ void Matrice::print() {
     }
 }
 
+Matrice randomMatrice(unsigned int I, unsigned int J){
+    vector<vector<double>> tab;
+    for (unsigned int i = 0; i < I; ++i) {
+        tab.push_back({});
+        for (unsigned int j = 0; j < J; ++j) {
+                 tab[i].push_back(rand()%100 -50);
+        }
+    }return {tab};
+}
