@@ -11,7 +11,7 @@ Matrice imageToMatrice(Matrice M,char name[100]){
     if(pFile){
     vector<vector<double>> tab = M.getTab();
     }
-    else {
+    else{
         char error[124];
         sprintf(error,"could not write the file %s",name);
         perror("could not write the file");
