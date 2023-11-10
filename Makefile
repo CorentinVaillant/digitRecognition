@@ -17,11 +17,25 @@ OBJECTS = $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SOURCES))
 # Executable name
 EXECUTABLE = $(BINDIR)/main.exe
 
+default :
+	echo off
+	make all
+
 all: $(EXECUTABLE)
+
+echo :
+	echo on
+	make all
 
 run : $(EXECUTABLE)
 	echo run $(EXECUTABLE)
 	./$(EXECUTABLE)
+
+installLib: 
+	git clone --depth=1 https://github.com/GreycLab/CImg.git --branch v.3.3.1 lib/CImg
+
+compilLib: lib/CImg
+	echo a
 
 # Rule for linking object files and creating the executable
 $(EXECUTABLE): $(OBJECTS)
@@ -36,3 +50,6 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
 # Rule to clean the build
 clean:
 	@rm -rf $(BUILDDIR) $(BINDIR)
+
+cleanLib:
+	@rm -rf lib/*

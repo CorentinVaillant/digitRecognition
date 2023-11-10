@@ -42,8 +42,7 @@ private:
 
     double determinant;
     bool isDeterminantCalculed;
-
-
 };
 
+Matrice randomMatrice(unsigned int I, unsigned int J);//return a random matrice
 #endif //DEEPLEARNING_MATRICE_H
