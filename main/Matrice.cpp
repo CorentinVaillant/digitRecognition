@@ -1,10 +1,11 @@
-#include <iostream>
 #include "Matrice.h"
+#define _GLIBCXX_USE_C99 1
+#include <ArduinoSTL.h>
+#include <iostream>
 
-using namespace std;
 
 //initialisation
-Matrice::Matrice(vector<std::vector<double>> tab){
+Matrice::Matrice(std::vector<std::vector<double>> tab){
     m_tab = tab;
     m_height = tab.size();
     m_width = tab[0].size();
@@ -16,23 +17,23 @@ Matrice::Matrice(vector<std::vector<double>> tab){
 
     for(unsigned int i(1);i<m_height;i++){
         if(m_tab[i].size() != m_width){
-            throw std::runtime_error("ERROR : Invalid shape !");}
+            Serial.print("ERROR : Invalid shape !");}
             } //vérification de la forme de la matrice.
 }
 
 //retourne le tableau de nombre associé à la matrice
-std::vector<vector<double>> Matrice::getTab() {
+std::vector<std::vector<double>> Matrice::getTab() {
     return m_tab;
 }
 
 //addition de deux matrices
 Matrice Matrice::operator+(const Matrice &M) {
     //vérification de la formes des matrices :
-    if((m_height != M.m_height) | (m_width != M.m_width)){cout << "ERROR : shapes are not matching for an addition !"<<endl;}
+    if((m_height != M.m_height) | (m_width != M.m_width)){std::cout << "ERROR : shapes are not matching for an addition !"<<std::endl;}
     //calcul :
     std::vector<std::vector<double>> resTab;
     for(unsigned int i(0);i<m_height;i++){
-        resTab.push_back({});
+        resTab.push_back(std::vector<double>({}));
         for (unsigned int j = 0; j < m_width; ++j) {
         resTab[i].push_back(m_tab[i][j] + M.m_tab[i][j]);
         }} return {resTab};
@@ -42,7 +43,7 @@ Matrice Matrice::operator+(const Matrice &M) {
 Matrice Matrice::operator*(double const& x){
     std::vector<std::vector<double>> resTab;
     for( unsigned int i(0);i<m_height;i++){
-        resTab.push_back({});
+        resTab.push_back(std::vector<double>({}));
         for (unsigned int j = 0; j < m_width; ++j) {
             resTab[i].push_back(m_tab[i][j] * x);
         }} return {resTab};
@@ -50,10 +51,10 @@ Matrice Matrice::operator*(double const& x){
 
 //multiplication d'une matrice par une autre
 Matrice Matrice::operator*(const Matrice &M) {
-    if(m_width != M.m_height ){cout << "ERROR : shapes are not matching for an addition !"<<endl;}
+    if(m_width != M.m_height ){std::cout << "ERROR : shapes are not matching for an addition !"<<std::endl;}
     std::vector<std::vector<double>> resTab;
     for(unsigned int i(0);i<m_height;i++){
-        resTab.push_back({});
+        resTab.push_back(std::vector<double>({}));
         for (unsigned int j = 0; j < M.m_width; ++j) {
             resTab[i].push_back(0);
             for (unsigned int k(0);k<m_width;k++){
@@ -64,9 +65,9 @@ Matrice Matrice::operator*(const Matrice &M) {
 
 //exponentiation d'une matrice
 Matrice Matrice::operator^(const int &n) {
-    if(n == 0){    vector<vector<double>> tab;
+    if(n == 0){    std::vector<std::vector<double>> tab;
         for (unsigned int i = 0; i < m_width; ++i) {
-            tab.push_back({});
+            tab.push_back(std::vector<double>({}));
             for (unsigned int j = 0; j < m_width; ++j) {
                 if(i == j){tab[i].push_back(1.0);}
                 else{tab[i].push_back(0.0);}
@@ -80,19 +81,19 @@ Matrice Matrice::operator^(const int &n) {
 }
 
 //retourne une ligne ou une colonne i ou j
-vector<double> Matrice::getRow(int i) {return m_tab[i];}
-vector<double> Matrice::getColumn(int j) {
-    vector<double> res;
+std::vector<double> Matrice::getRow(int i) {return m_tab[i];}
+std::vector<double> Matrice::getColumn(int j) {
+    std::vector<double> res;
     for(unsigned int i(0);i<m_height;i++){
         res.push_back(m_tab[i][j]);
     } return res;}
 
 //renvoie la matrice mineur (je suis pas sûr du nom de cette dernière x) )
 Matrice Matrice::getMinor(unsigned int I, unsigned int J) {
-    vector<vector<double>> res;
+    std::vector<std::vector<double>> res;
     for (unsigned int i = 0; i < m_height; ++i) {
         if (I != i) {
-            res.push_back({});
+            res.push_back(std::vector<double>({}));
             for (unsigned int j = 0; j < m_width; ++j) {
                 if (J != j) {
                     res.back().push_back(m_tab[i][j]);
@@ -105,9 +106,9 @@ Matrice Matrice::getMinor(unsigned int I, unsigned int J) {
 Matrice Matrice::getComatrice() {
     if(isComatriceCalculed) return *pComatrice;
 
-    vector<vector<double>> res;
+    std::vector<std::vector<double>> res;
     for (unsigned int i = 0; i < m_height; ++i) {
-        res.push_back({});
+        res.push_back(std::vector<double>({}));
         for (unsigned int j = 0; j < m_width; ++j) {
         res[i].push_back((1-((i+j)%2)*2)* getMinor(i,j).getDet()); // (1-((i+j)%2)*2) pow(-1,i+j)
         }
@@ -140,9 +141,9 @@ double Matrice::getDet() {
 Matrice Matrice::getTranspose() {
     if(isTransposeCalculed) return *pTranspose;
 
-    vector<vector<double>> resTab;
+    std::vector<std::vector<double>> resTab;
     for (unsigned int i = 0; i < m_width; ++i) {
-        resTab.push_back({});
+        resTab.push_back(std::vector<double>({}));
         for (unsigned int j = 0; j < m_height; ++j) {
             resTab[i].push_back(m_tab[j][i]);
         }
@@ -183,18 +184,23 @@ void Matrice::freeConectedMatrice()
 //affiche la matrice
 void Matrice::print() {
     for(unsigned int i(0);i < m_height;i++){
-        cout << '|';
+        std::cout << '|';
+        Serial.print('|');
         for(unsigned int j(0);j<m_width;j++){
             printf("%3f|",m_tab[i][j]);
+            char buffer[20] ;
+            sprintf(buffer,"%3f|",m_tab[i][j]);
+            Serial.println(buffer);
         }
-        cout << endl;
+        std::cout << std::endl;
+        Serial.print("\n");
     }
 }
 
 Matrice randomMatrice(unsigned int I, unsigned int J){
-    vector<vector<double>> tab;
+    std::vector<std::vector<double>> tab;
     for (unsigned int i = 0; i < I; ++i) {
-        tab.push_back({});
+        tab.push_back(std::vector<double>({}));
         for (unsigned int j = 0; j < J; ++j) {
                  tab[i].push_back(rand()%100 -50);
         }

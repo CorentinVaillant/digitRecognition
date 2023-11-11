@@ -1,6 +1,7 @@
 #ifndef DEEPLEARNING_MATRICE_H
 #define DEEPLEARNING_MATRICE_H
-#include <vector>
+
+#include <ArduinoSTL.h>
 
 class Matrice {
 

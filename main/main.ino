@@ -1,10 +1,15 @@
+#include "Matrice.h"
+#include <ArduinoSTL.h>
+
+
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
+  Serial.begin(9600);
+  Matrice A = Matrice(std::vector<std::vector<double>>
+                        {{1,0},
+                        {0,1}});
+  A.print();
 }
 
 void loop() {
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(500);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(500);
+
 }
