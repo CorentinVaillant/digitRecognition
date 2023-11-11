@@ -1,5 +1,3 @@
-# Makefile for your C++ project
-
 # Compiler
 CXX = g++
 # Compiler flags
@@ -9,17 +7,17 @@ CXXFLAGS = -std=c++11 -Wall -Wextra
 SRCDIR = .
 BUILDDIR = build
 BINDIR = bin
+LIBDIR = lib
 
 # Source files
 SOURCES = $(SRCDIR)/main.cpp $(SRCDIR)/Matrice.cpp
 # Object files
 OBJECTS = $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SOURCES))
+# Import files
+IMPORT = $(LIBDIR)/%.h
+
 # Executable name
 EXECUTABLE = $(BINDIR)/main.exe
-
-default :
-	echo off
-	make all
 
 all: $(EXECUTABLE)
 
@@ -32,10 +30,9 @@ run : $(EXECUTABLE)
 	./$(EXECUTABLE)
 
 installLib: 
-	git clone --depth=1 https://github.com/GreycLab/CImg.git --branch v.3.3.1 lib/CImg
-
-compilLib: lib/CImg
-	echo a
+	@mkdir -p $(LIBDIR)
+	curl -LJO https://github.com/nothings/stb/raw/master/stb_image.h 
+	@mv stb_image.h lib/
 
 # Rule for linking object files and creating the executable
 $(EXECUTABLE): $(OBJECTS)
@@ -53,3 +50,5 @@ clean:
 
 cleanLib:
 	@rm -rf lib/*
+
+.PHONY: all echo run installLib clean cleanLib

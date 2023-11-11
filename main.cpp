@@ -1,6 +1,6 @@
 #include  <iostream>
 #include "Matrice.h"
-#include "Images.cpp"
+#include "lib/stb_image.h"
 #include <vector>
 using namespace std;
 
